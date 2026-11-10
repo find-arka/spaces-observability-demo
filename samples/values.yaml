@@ -7,6 +7,9 @@ azure:
   # lands here, because a namespaced MR writes its connection Secret to its own namespace.
   # The namespace, its azure-creds Secret and its ProviderConfig come from outside this chart.
   namespace: team-a
+  # Azure ProviderConfig the XRs use. Set per cluster from the Akuity label
+  # upbound.io/azure-providerconfig ("wi" = workload identity, no client secret).
+  providerConfigName: default
   region: eastus
   addressRange: 10.10.0.0/16
   generalSubnetRange: 10.10.1.0/24

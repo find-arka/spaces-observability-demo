@@ -10,7 +10,7 @@ spec:
     addressRange: {{ .Values.azure.addressRange }}
     generalSubnetRange: {{ .Values.azure.generalSubnetRange }}
     managementPolicies: ["*"]
-    providerConfigName: default
+    providerConfigName: {{ .Values.azure.providerConfigName }}
 {{- if .Values.azure.aks.enabled }}
 ---
 # Must share the Network's id: the AKS composition selects the resource group and
@@ -26,7 +26,7 @@ spec:
     region: {{ .Values.azure.region }}
     version: {{ .Values.azure.aks.version | quote }}
     managementPolicies: ["*"]
-    providerConfigName: default
+    providerConfigName: {{ .Values.azure.providerConfigName }}
     nodes:
       count: {{ .Values.azure.aks.nodeCount }}
       instanceType: {{ .Values.azure.aks.instanceType }}

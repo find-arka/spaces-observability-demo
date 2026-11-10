@@ -30,6 +30,8 @@ spec:
           parameters:
           - name: controlPlane
             value: '{{ index .metadata.labels "upbound.io/controlplane" }}'
+          - name: azure.providerConfigName
+            value: '{{ index .metadata.labels "upbound.io/azure-providerconfig" | default "default" }}'
       syncPolicy:
         automated:
           prune: true
