@@ -2,7 +2,7 @@ apiVersion: azure.platform.upbound.io/v1alpha1
 kind: Network
 metadata:
   name: {{ include "samples.id" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.azure.namespace }}
 spec:
   parameters:
     id: {{ include "samples.id" . }}
@@ -19,7 +19,7 @@ apiVersion: azure.platform.upbound.io/v1alpha1
 kind: AKS
 metadata:
   name: {{ include "samples.id" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.azure.namespace }}
 spec:
   parameters:
     id: {{ include "samples.id" . }}

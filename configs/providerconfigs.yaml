@@ -29,3 +29,18 @@ metadata:
 spec:
   credentials:
     source: None
+---
+# Azure ProviderConfig for tenant namespace team-a. The compositions reference kind
+# ProviderConfig named "default" in the XR's namespace, so each tenant namespace needs one.
+apiVersion: azure.m.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+  namespace: team-a
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: team-a
+      name: azure-creds
+      key: credentials

@@ -3,6 +3,10 @@ controlPlane: ""
 namespace: default
 
 azure:
+  # Tenant namespace for the Azure XRs. The AKS kubeconfig Secret (<xr-name>-akscluster)
+  # lands here, because a namespaced MR writes its connection Secret to its own namespace.
+  # The namespace, its azure-creds Secret and its ProviderConfig come from outside this chart.
+  namespace: team-a
   region: eastus
   addressRange: 10.10.0.0/16
   generalSubnetRange: 10.10.1.0/24
