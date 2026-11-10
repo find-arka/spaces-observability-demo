@@ -1,0 +1,31 @@
+# Instance-wide Argo CD settings. resource.inclusions limits what the application controller
+# watches and caches in each control plane to the API groups this repo syncs. Without it the
+# controller caches every type behind ~340 provider CRDs and OOMKills at the agent's 512Mi
+# (CLUSTER_SIZE_SMALL). Add a group here before syncing a new kind; excluded kinds cannot sync.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  admin.enabled: "false"
+  exec.enabled: "false"
+  ga.anonymizeusers: "false"
+  helm.enabled: "true"
+  kustomize.enabled: "true"
+  server.rbac.log.enforce.enable: "false"
+  statusbadge.enabled: "false"
+  ui.bannerpermanent: "false"
+  users.anonymous.enabled: "false"
+  resource.inclusions: |
+    - apiGroups:
+      - pkg.crossplane.io          # Provider, Configuration, Function
+      - azure.platform.upbound.io  # Network, AKS (XRs)
+      - azure.m.upbound.io         # Azure ProviderConfig
+      - http.m.crossplane.io       # provider-http Request, DisposableRequest, ProviderConfig
+      kinds:
+      - "*"
+      clusters:
+      - "*"
