@@ -44,3 +44,13 @@ spec:
       namespace: team-a
       name: azure-creds
       key: credentials
+---
+# provider-http in tenant namespace team-a (used by the live alert demo).
+apiVersion: http.m.crossplane.io/v1alpha2
+kind: ProviderConfig
+metadata:
+  name: default
+  namespace: team-a
+spec:
+  credentials:
+    source: None
