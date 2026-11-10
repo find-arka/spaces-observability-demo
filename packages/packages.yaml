@@ -1,0 +1,17 @@
+# Crossplane packages installed in every control plane.
+# The Configuration pulls its own dependencies: provider-azure-containerservice v2,
+# configuration-azure-network v2.0.0 (and through it provider-azure-network v2),
+# provider-helm v1, provider-kubernetes v1 and function-auto-ready.
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: crossplane-contrib-provider-http
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/provider-http:v1.0.15
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: upbound-configuration-azure-aks
+spec:
+  package: xpkg.upbound.io/upbound/configuration-azure-aks:v2.0.3

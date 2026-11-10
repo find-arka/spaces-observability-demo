@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: crossplane-controlplanes
+  namespace: argocd
+spec:
+  description: Crossplane and Upbound APIs only; no workloads in control planes
+  sourceRepos:
+  - '*'
+  destinations:
+  - server: 'http://cluster-default-*:8001'
+    namespace: '*'
+  clusterResourceWhitelist:
+  - group: '*.crossplane.io'
+    kind: '*'
+  - group: '*.upbound.io'
+    kind: '*'
+  namespaceResourceWhitelist:
+  - group: '*.crossplane.io'
+    kind: '*'
+  - group: '*.upbound.io'
+    kind: '*'

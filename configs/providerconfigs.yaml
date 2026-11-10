@@ -1,0 +1,31 @@
+# ProviderConfigs used by the samples. Both are namespaced (Crossplane v2 ".m." groups)
+# and live in namespace default, next to the XRs and Requests that use them.
+#
+# Azure: the Network and AKS compositions reference kind ProviderConfig, name "default",
+# in the XR's namespace. The credentials Secret is NOT in this repo. It is delivered into
+# each control plane out of band (for example by a Spaces SharedExternalSecret):
+#   Secret default/azure-creds, key "credentials", value = service principal JSON as
+#   printed by `az ad sp create-for-rbac --json-auth`
+#   ({"clientId","clientSecret","subscriptionId","tenantId",...}).
+apiVersion: azure.m.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+  namespace: default
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: default
+      name: azure-creds
+      key: credentials
+---
+# provider-http: public endpoints, no credentials.
+apiVersion: http.m.crossplane.io/v1alpha2
+kind: ProviderConfig
+metadata:
+  name: default
+  namespace: default
+spec:
+  credentials:
+    source: None

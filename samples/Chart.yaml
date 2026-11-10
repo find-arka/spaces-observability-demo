@@ -1,0 +1,5 @@
+apiVersion: v2
+name: samples
+description: Per-control-plane sample resources (Azure Network and AKS XRs, provider-http requests)
+type: application
+version: 0.1.0

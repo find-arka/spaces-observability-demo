@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-samples
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          upbound.io/kind: crossplane-controlplane
+  template:
+    metadata:
+      name: '{{ index .metadata.labels "upbound.io/controlplane" }}-samples'
+    spec:
+      project: crossplane-controlplanes
+      destination:
+        server: '{{ .server }}'
+        namespace: default
+      source:
+        repoURL: https://github.com/find-arka/spaces-observability-demo
+        targetRevision: main
+        path: samples
+        helm:
+          releaseName: samples
+          parameters:
+          - name: controlPlane
+            value: '{{ index .metadata.labels "upbound.io/controlplane" }}'
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: -1          # CRDs appear only after packages install; keep retrying
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 3m

@@ -1,0 +1,33 @@
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: Network
+metadata:
+  name: {{ include "samples.id" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  parameters:
+    id: {{ include "samples.id" . }}
+    region: {{ .Values.azure.region }}
+    addressRange: {{ .Values.azure.addressRange }}
+    generalSubnetRange: {{ .Values.azure.generalSubnetRange }}
+    managementPolicies: ["*"]
+    providerConfigName: default
+{{- if .Values.azure.aks.enabled }}
+---
+# Must share the Network's id: the AKS composition selects the resource group and
+# subnet by label azure.platform.upbound.io/network-id=<id>.
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: AKS
+metadata:
+  name: {{ include "samples.id" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  parameters:
+    id: {{ include "samples.id" . }}
+    region: {{ .Values.azure.region }}
+    version: {{ .Values.azure.aks.version | quote }}
+    managementPolicies: ["*"]
+    providerConfigName: default
+    nodes:
+      count: {{ .Values.azure.aks.nodeCount }}
+      instanceType: {{ .Values.azure.aks.instanceType }}
+{{- end }}

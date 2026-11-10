@@ -1,0 +1,69 @@
+# Healthy, observe-only Request: a GET on a fixed resource every poll interval (1m default).
+# Observe-only means deleting it never sends DELETE to the public API.
+apiVersion: http.m.crossplane.io/v1alpha2
+kind: Request
+metadata:
+  name: {{ .Values.controlPlane }}-healthy-observe
+  namespace: {{ .Values.namespace }}
+spec:
+  managementPolicies: ["Observe"]
+  providerConfigRef:
+    kind: ProviderConfig
+    name: default
+  forProvider:
+    waitTimeout: 30s
+    payload:
+      baseUrl: {{ .Values.http.healthyBaseUrl }}/posts
+      body: "{}"
+    mappings:
+    - action: OBSERVE
+      url: .payload.baseUrl + "/1"
+    expectedResponseCheck:
+      type: CUSTOM
+      logic: .response.statusCode == 200
+---
+# Healthy DisposableRequest that re-sends a GET every disposableInterval.
+apiVersion: http.m.crossplane.io/v1alpha2
+kind: DisposableRequest
+metadata:
+  name: {{ .Values.controlPlane }}-healthy-poll
+  namespace: {{ .Values.namespace }}
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: default
+  forProvider:
+    url: {{ .Values.http.healthyBaseUrl }}/todos/1
+    method: GET
+    waitTimeout: 30s
+    shouldLoopInfinitely: true
+    nextReconcile: {{ .Values.http.disposableInterval }}
+---
+# Fails on purpose: the host never resolves. Observe gets no response, so the
+# reconciler tries CREATE (POST), which fails too. This drives reconcile-error and
+# Synced=False metrics. Nothing is ever created, so deletion completes immediately.
+apiVersion: http.m.crossplane.io/v1alpha2
+kind: Request
+metadata:
+  name: {{ .Values.controlPlane }}-failing
+  namespace: {{ .Values.namespace }}
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: default
+  forProvider:
+    waitTimeout: 10s
+    payload:
+      baseUrl: {{ .Values.http.failingBaseUrl }}/posts
+      body: '{"title": "demo"}'
+    headers:
+      Content-Type:
+      - application/json
+    mappings:
+    - action: CREATE
+      body: '{title: .payload.body.title}'
+      url: .payload.baseUrl
+    - action: OBSERVE
+      url: .payload.baseUrl + "/1"
+    - action: REMOVE
+      url: .payload.baseUrl + "/1"
