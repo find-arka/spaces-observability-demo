@@ -10,7 +10,7 @@ azure:
   # Azure ProviderConfig the XRs use. Set per cluster from the Akuity label
   # upbound.io/azure-providerconfig ("wi" = workload identity, no client secret).
   providerConfigName: default
-  region: eastus
+  region: westus
   addressRange: 10.10.0.0/16
   generalSubnetRange: 10.10.1.0/24
   aks:
