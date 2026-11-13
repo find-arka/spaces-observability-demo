@@ -23,7 +23,7 @@ spec:
         namespace: default
       source:
         repoURL: https://github.com/find-arka/spaces-observability-demo
-        targetRevision: main
+        targetRevision: dr-test
         path: configs
       syncPolicy:
         automated:
