@@ -22,6 +22,7 @@ spec:
       type: CUSTOM
       logic: .response.statusCode == 200
 ---
+{{- if ne .Values.controlPlane "ctp-1" }}
 # Healthy DisposableRequest that re-sends a GET every disposableInterval.
 apiVersion: http.m.crossplane.io/v1alpha2
 kind: DisposableRequest
@@ -38,6 +39,7 @@ spec:
     waitTimeout: 30s
     shouldLoopInfinitely: true
     nextReconcile: {{ .Values.http.disposableInterval }}
+{{- end }}
 ---
 # Fails on purpose: the host never resolves. Observe gets no response, so the
 # reconciler tries CREATE (POST), which fails too. This drives reconcile-error and

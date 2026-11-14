@@ -11,7 +11,7 @@ azure:
   # upbound.io/azure-providerconfig ("wi" = workload identity, no client secret).
   providerConfigName: default
   region: westus
-  addressRange: 10.10.0.0/16
+  addressRange: 10.10.0.0/15
   generalSubnetRange: 10.10.1.0/24
   aks:
     enabled: true
