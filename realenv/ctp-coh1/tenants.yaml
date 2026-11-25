@@ -1,0 +1,49 @@
+# Tenant environments env-a and env-b of cohort control plane ctp-coh1. RG <id>-rg is pre-created; the identity is RG-scoped.
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: Network
+metadata: {name: re-coh1-a, namespace: env-a}
+spec:
+  parameters:
+    id: re-coh1-a
+    region: eastus
+    addressRange: 10.21.0.0/16
+    generalSubnetRange: 10.21.1.0/24
+    managementPolicies: ["*"]
+    providerConfigName: default
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: AKS
+metadata: {name: re-coh1-a, namespace: env-a}
+spec:
+  parameters:
+    id: re-coh1-a
+    region: eastus
+    version: "1.34"
+    managementPolicies: ["*"]
+    providerConfigName: default
+    nodes: {count: 1, instanceType: Standard_B2s}
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: Network
+metadata: {name: re-coh1-b, namespace: env-b}
+spec:
+  parameters:
+    id: re-coh1-b
+    region: eastus
+    addressRange: 10.22.0.0/16
+    generalSubnetRange: 10.22.1.0/24
+    managementPolicies: ["*"]
+    providerConfigName: default
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: AKS
+metadata: {name: re-coh1-b, namespace: env-b}
+spec:
+  parameters:
+    id: re-coh1-b
+    region: eastus
+    version: "1.34"
+    managementPolicies: ["*"]
+    providerConfigName: default
+    nodes: {count: 1, instanceType: Standard_B2s}

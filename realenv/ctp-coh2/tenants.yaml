@@ -1,0 +1,25 @@
+# Tenant environment env-a of cohort control plane ctp-coh2.
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: Network
+metadata: {name: re-coh2-a, namespace: env-a}
+spec:
+  parameters:
+    id: re-coh2-a
+    region: eastus
+    addressRange: 10.23.0.0/16
+    generalSubnetRange: 10.23.1.0/24
+    managementPolicies: ["*"]
+    providerConfigName: default
+---
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: AKS
+metadata: {name: re-coh2-a, namespace: env-a}
+spec:
+  parameters:
+    id: re-coh2-a
+    region: eastus
+    version: "1.34"
+    managementPolicies: ["*"]
+    providerConfigName: default
+    nodes: {count: 1, instanceType: Standard_B2s}

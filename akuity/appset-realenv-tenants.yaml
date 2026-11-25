@@ -1,0 +1,36 @@
+# Real-environment lab: XRs only. Packages, ProviderConfigs and namespaces come from Spaces ResourceDistribution,
+# because the admission guardrails in these control planes deny those writes to anyone else.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: realenv-tenants
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          upbound.io/lab: realenv
+  template:
+    metadata:
+      name: '{{ index .metadata.labels "upbound.io/controlplane" }}-tenants'
+    spec:
+      project: crossplane-controlplanes
+      destination:
+        server: '{{ .server }}'
+      source:
+        repoURL: https://github.com/find-arka/spaces-observability-demo
+        targetRevision: realenv-2026-11
+        path: 'realenv/{{ index .metadata.labels "upbound.io/controlplane" }}'
+      syncPolicy:
+        automated:
+          prune: false
+        syncOptions:
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: -1
+          backoff: {duration: 30s, factor: 2, maxDuration: 3m}
