@@ -2,7 +2,7 @@
 ---
 apiVersion: azure.platform.upbound.io/v1alpha1
 kind: Network
-metadata: {name: re-coh1-a, namespace: env-a}
+metadata: {name: re-coh1-a, namespace: env-a, labels: {r63a-probe: "control"}}
 spec:
   parameters:
     id: re-coh1-a
