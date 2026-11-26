@@ -14,7 +14,7 @@ spec:
 ---
 apiVersion: azure.platform.upbound.io/v1alpha1
 kind: AKS
-metadata: {name: re-ded1-a, namespace: env-a}
+metadata: {name: re-ded1-a, namespace: env-a, labels: {dr-drill: r71}}
 spec:
   parameters:
     id: re-ded1-a
